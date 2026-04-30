@@ -1,21 +1,12 @@
 // Đây là hàm xử lý chính của Backend (Serverless)
-export default async function handler(req, res) {
-    // CORS / preflight support
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-
-    if (req.method === 'OPTIONS') {
-        return res.status(204).end();
-    }
-
+module.exports = async function handler(req, res) {
     // 1. Chỉ chấp nhận các yêu cầu (request) dạng POST từ Frontend gửi lên
     if (req.method !== 'POST') {
         return res.status(405).json({ error: 'Chỉ hỗ trợ phương thức POST' });
     }
 
     // 2. Lấy câu hỏi do Frontend gửi lên (nằm trong body của request)
-    const userText = req.body?.text;
+    const userText = req.body.text; 
 
     // 3. LẤY API KEY BÍ MẬT
     // process.env là nơi an toàn chứa các biến môi trường. 
@@ -39,7 +30,7 @@ export default async function handler(req, res) {
 
     // 5. Backend đứng ra gọi API của Google thay cho Frontend
     try {
-        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${API_KEY}`, {
+        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
