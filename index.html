@@ -1,0 +1,98 @@
+<!-- Báo cho trình duyệt biết đây là file HTML5 -->
+<!DOCTYPE html>
+<!-- Thẻ html bao bọc toàn bộ trang web, lang="vi" khai báo ngôn ngữ tiếng Việt -->
+<html lang="vi">
+
+<head>
+    <!-- Thiết lập bảng mã UTF-8 để hiển thị đúng tiếng Việt có dấu -->
+    <meta charset="UTF-8">
+    <!-- Cấu hình để trang web hiển thị đúng tỉ lệ trên màn hình điện thoại -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Tiêu đề sẽ hiển thị trên tab của trình duyệt web -->
+    <title>Portfolio - Hieu Toan</title>
+    <!-- Dòng dưới đây để liên kết file CSS vào HTML -->
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- PHẦN 1: HEADER - Khu vực chứa tiêu đề lớn và thanh điều hướng -->
+    <header>
+        <!-- Thẻ h1 là tiêu đề lớn nhất, thường dùng cho tên hoặc tiêu đề chính -->
+        <h1>Nguyễn Hiếu Toàn</h1>
+        
+        <!-- Thẻ nav dùng để bọc các đường link điều hướng của menu -->
+        <nav>
+            <!-- ul là danh sách không thứ tự (Unordered List) -->
+            <ul>
+                <!-- li (List Item) là từng mục trong danh sách -->
+                <!-- Thẻ a (Anchor) tạo liên kết. href="#about" sẽ cuộn trang xuống phần tử có id="about" -->
+                <li><a href="#about">Giới thiệu</a></li>
+                <li><a href="#skills">Kỹ năng</a></li>
+                <li><a href="#projects">Dự án</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- PHẦN 2: MAIN - Bao bọc toàn bộ nội dung trọng tâm của trang -->
+    <main>
+        
+        <!-- Thẻ section chia trang thành các khu vực nội dung riêng biệt. -->
+        <!-- id="about" là định danh duy nhất để liên kết menu ở trên nhảy xuống đây -->
+        <section id="about">
+            <!-- Thẻ h2 dùng cho tiêu đề phụ -->
+            <h2>Giới thiệu bản thân</h2>
+            <!-- Thẻ p (Paragraph) chứa đoạn văn bản -->
+            <p>Chào bạn, tôi là một sinh viên Công nghệ Thông tin với định hướng phát triển chuyên sâu vào lĩnh vực Backend và Data Engineering. Tôi đam mê làm việc với dữ liệu, xây dựng luồng logic hệ thống và đang từng bước hoàn thiện nền tảng kỹ thuật vững chắc.</p>
+        </section>
+
+        <!-- Khu vực hiển thị công cụ và kỹ năng -->
+        <section id="skills">
+            <h2>Công cụ & Kỹ năng</h2>
+            <ul>
+                <!-- Thẻ strong dùng để in đậm văn bản nhằm nhấn mạnh -->
+                <li><strong>Ngôn ngữ lập trình:</strong> Python, C, JavaScript (Cơ bản)</li>
+                <li><strong>Cơ sở dữ liệu:</strong> MySQL</li>
+                <li><strong>Môi trường & Công cụ:</strong> Linux (WSL Windows), VS Code</li>
+            </ul>
+        </section>
+
+        <!-- Khu vực hiển thị các dự án đã làm -->
+        <section id="projects">
+            <h2>Dự án nổi bật</h2>
+            <!-- Thẻ article bọc một nội dung độc lập (ở đây là một dự án cụ thể) -->
+            <article>
+                <!-- Thẻ h3 là tiêu đề nhỏ hơn h2 -->
+                <h3>1. Portfolio & AI Chatbot Assistant</h3>
+                <p>Trang web cá nhân giới thiệu kỹ năng, tích hợp trợ lý ảo AI để trả lời tự động các câu hỏi của nhà tuyển dụng. Dự án được xây dựng từ đầu để rèn luyện tư duy cấu trúc dữ liệu web, tích hợp JavaScript và gọi API.</p>
+            </article>
+        </section>
+
+    </main>
+    <!-- THÊM NÚT BẤM MỞ CHAT Ở ĐÂY -->
+    <button id="chat-toggle-btn">💬 Hỏi AI về Toàn</button>
+    <!-- PHẦN 3: GIAO DIỆN CHATBOT -->
+    <!-- Thẻ div là một khối chứa rỗng, dùng để gom nhóm các phần tử lại với nhau -->
+    <div id="chatbot-container">
+        <h3>Trợ lý AI của Toàn</h3>
+        
+        <!-- Khối này sẽ dùng để hiển thị nội dung các đoạn chat qua lại -->
+        <div id="chat-history">
+            <p><strong>AI:</strong> Chào bạn, tôi có thể cung cấp thêm thông tin gì về định hướng Backend và các kỹ năng của Toàn?</p>
+        </div>
+        
+        <!-- Khối này chứa ô nhập chữ và nút gửi -->
+        <div>
+            <!-- Thẻ input type="text" tạo ra một ô để người dùng gõ chữ -->
+            <!-- placeholder là dòng chữ mờ gợi ý bên trong ô input -->
+            <input type="text" id="chat-input" placeholder="Nhập câu hỏi của bạn...">
+            
+            <!-- Thẻ button tạo ra một nút bấm -->
+            <button id="send-btn">Gửi</button>
+        </div>
+    </div>
+    <!-- Dòng này để kết nối file JavaScript (sẽ tạo ở Bước 3) -->
+    <script src="script.js"></script>
+
+</body>
+</html>

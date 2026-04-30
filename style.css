@@ -1,0 +1,199 @@
+/* =========================================================
+   1. CÀI ĐẶT CHUNG (GLOBAL STYLES)
+   Reset lại lề (margin) và đệm (padding) mặc định của trình duyệt
+   để chúng ta dễ dàng kiểm soát kích thước chuẩn xác hơn.
+========================================================= */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box; /* Tính toán kích thước bao gồm cả viền, giúp layout không bị vỡ */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Đổi font chữ cho hiện đại */
+}
+
+body {
+    background-color: #f4f7f6; /* Màu nền xám nhạt cho toàn bộ trang web, nhìn dịu mắt */
+    color: #333; /* Màu chữ xám đậm, dễ đọc hơn màu đen tuyền */
+    line-height: 1.6; /* Khoảng cách giữa các dòng chữ cho thoáng */
+}
+
+/* =========================================================
+   2. PHẦN HEADER (THANH ĐIỀU HƯỚNG TRÊN CÙNG)
+========================================================= */
+header {
+    background-color: #1a252c; /* Màu xanh đen đậm, tạo cảm giác công nghệ/hệ thống */
+    color: white;
+    padding: 15px 50px;
+    
+    /* Flexbox: Công cụ thần thánh trong CSS để sắp xếp phần tử.
+       Nó giúp đẩy Tên (h1) sang trái, và Menu (nav) sang phải */
+    display: flex; 
+    justify-content: space-between; /* Tạo khoảng trống tối đa giữa 2 phần tử */
+    align-items: center; /* Căn giữa theo chiều dọc */
+    
+    /* Cố định thanh menu ở trên cùng khi cuộn chuột */
+    position: sticky; 
+    top: 0;
+    z-index: 1000; /* Đảm bảo menu luôn nằm đè lên các nội dung khác (không bị che lấp) */
+}
+
+/* Bỏ dấu chấm tròn mặc định của thẻ danh sách ul trong menu */
+header nav ul {
+    list-style-type: none; 
+    display: flex; /* Dàn hàng ngang các mục trong menu */
+    gap: 20px; /* Khoảng cách giữa các mục */
+}
+
+/* Định dạng các đường link (thẻ a) trong menu */
+header nav ul li a {
+    color: white;
+    text-decoration: none; /* Bỏ gạch chân mặc định của link */
+    font-weight: bold;
+    transition: color 0.3s; /* Hiệu ứng chuyển màu mượt mà trong 0.3 giây */
+}
+
+/* Hiệu ứng khi di chuột (hover) vào link */
+header nav ul li a:hover {
+    color: #3498db; /* Chuyển sang màu xanh dương sáng */
+}
+
+/* =========================================================
+   3. NỘI DUNG CHÍNH (MAIN CONTENT)
+========================================================= */
+main {
+    max-width: 800px; /* Giới hạn chiều rộng nội dung để không bị dàn mỏng quá trên màn hình to */
+    margin: 40px auto; /* Căn giữa màn hình (trên/dưới 40px, trái/phải tự động chia đều) */
+    padding: 0 20px;
+}
+
+section {
+    background-color: white;
+    padding: 25px;
+    margin-bottom: 30px; /* Khoảng cách giữa các khối nội dung */
+    border-radius: 8px; /* Bo tròn các góc của khối */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05); /* Tạo bóng đổ nhẹ nhàng tạo cảm giác nổi (3D) */
+}
+
+section h2 {
+    color: #2c3e50;
+    border-bottom: 2px solid #3498db; /* Tạo một đường kẻ ngang dưới tiêu đề */
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+}
+
+ul {
+    padding-left: 20px; /* Lùi đầu dòng cho danh sách kỹ năng */
+}
+
+/* =========================================================
+   4. GIAO DIỆN CHATBOT (GÓC DƯỚI BÊN PHẢI)
+========================================================= */
+    /* --- THÊM ĐOẠN NÀY ĐỂ TRANG TRÍ NÚT BẤM --- */
+#chat-toggle-btn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    padding: 12px 20px;
+    background-color: #2c3e50; /* Màu tối đậm chất coder */
+    color: white;
+    border: none;
+    border-radius: 50px; /* Bo tròn thành hình viên thuốc */
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    z-index: 1001; /* Đảm bảo nút luôn nổi lên trên cùng */
+}
+
+#chat-toggle-btn:hover {
+    background-color: #3498db;
+}
+
+/* --- SỬA LẠI KHUNG CHATBOT CŨ --- */
+#chatbot-container {
+    position: fixed; 
+    bottom: 70px; /* Nâng lên một chút để không đè lên nút bấm */
+    right: 20px;
+    width: 320px;
+    
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    overflow: hidden;
+    
+    display: none; /* QUAN TRỌNG: Mặc định ẩn khung chat đi */
+}
+
+/* --- THÊM CLASS NÀY ĐỂ DÙNG JS BẬT/TẮT --- */
+.show-chat {
+    display: block !important; /* Khi class này được thêm vào, khung chat sẽ hiện ra */
+}
+
+#chatbot-container h3 {
+    background-color: #3498db; /* Tiêu đề màu xanh dương */
+    color: white;
+    padding: 12px;
+    font-size: 16px;
+    text-align: center;
+}
+
+#chat-history {
+    height: 250px; /* Giới hạn chiều cao khung chat */
+    overflow-y: auto; /* Hiện thanh cuộn nếu tin nhắn dài vượt quá chiều cao */
+    padding: 15px;
+    background-color: #f9f9f9;
+    font-size: 14px;
+}
+
+/* Khu vực nhập liệu (chứa input và button) */
+#chatbot-container div:last-child {
+    display: flex;
+    padding: 10px;
+    border-top: 1px solid #ddd;
+    background: white;
+}
+
+#chat-input {
+    flex: 1; /* Cho phép ô input chiếm hết phần không gian còn lại */
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    outline: none; /* Bỏ viền xanh mặc định khi click vào */
+}
+
+#send-btn {
+    background-color: #3498db;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    margin-left: 10px; /* Cách ô input một chút */
+    border-radius: 4px;
+    cursor: pointer; /* Biến con trỏ chuột thành hình bàn tay khi chỉ vào nút */
+    font-weight: bold;
+}
+
+#send-btn:hover {
+    background-color: #2980b9; /* Đổi màu nút đậm hơn khi di chuột vào */
+}
+/* --- CSS CHO BONG BÓNG CHAT --- */
+/* Cấu hình chung cho mọi tin nhắn */
+.chat-message {
+    margin-bottom: 10px;
+    padding: 8px 12px;
+    border-radius: 8px;
+    max-width: 85%; /* Tin nhắn không dài chiếm hết 100% chiều ngang */
+    word-wrap: break-word; /* Tự động xuống dòng nếu chữ quá dài */
+}
+
+/* Tin nhắn của User (Người dùng) - Sẽ đẩy sang bên phải */
+.user-message {
+    background-color: #3498db;
+    color: white;
+    margin-left: auto; /* Đẩy phần tử sang sát mép phải */
+}
+
+/* Tin nhắn của AI - Nằm bên trái */
+.ai-message {
+    background-color: #e2e8f0;
+    color: #2c3e50;
+    margin-right: auto;
+}
