@@ -1,4 +1,4 @@
-let chatHistory = [];
+let messageHistory = [];
 document.addEventListener('DOMContentLoaded', function () {
     // Lấy các phần tử (elements) từ HTML thông qua ID
     const toggleBtn = document.getElementById('chat-toggle-btn');
@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', function () {
         chatHistory.scrollTop = chatHistory.scrollHeight;
 
         try {
-            chatHistory.push({
+            messageHistory.push({
                 role: "user",
                 parts: [{ text: userText }]
             });
@@ -72,7 +72,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
             const replyText = data?.reply || 'Không nhận được phản hồi từ server.';
-            chatHistory.push({
+            messageHistory.push({
                 role: "model",
                 parts: [{ text: replyText }]
             });
