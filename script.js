@@ -1,3 +1,4 @@
+let chatHistory = [];
 document.addEventListener('DOMContentLoaded', function () {
     // Lấy các phần tử (elements) từ HTML thông qua ID
     const toggleBtn = document.getElementById('chat-toggle-btn');
@@ -40,17 +41,22 @@ document.addEventListener('DOMContentLoaded', function () {
         chatHistory.scrollTop = chatHistory.scrollHeight;
 
         try {
+            chatHistory.push({
+                role: "user",
+                parts: [{ text: userText }]
+            });
             const response = await fetch('/api/chat', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    text: userText
+                    text: userText 
+                    history: chatHistory
                 })
             });
 
-            const text = await response.text();
+            const text = await response.text();     
             let data = {};
             if (text) {
                 try {
@@ -66,6 +72,10 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
             const replyText = data?.reply || 'Không nhận được phản hồi từ server.';
+            chatHistory.push({
+                role: "model",
+                parts: [{ text: replyText }]
+            });
             aiMsgElement.innerHTML = `<strong>AI:</strong> ${replyText.replace(/\n/g, '<br>')}`;
         } catch (error) {
             console.error('Chi tiết lỗi code:', error);
