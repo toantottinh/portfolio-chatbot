@@ -205,13 +205,13 @@ ul {
 
 .typing-indicator span {
   display: inline-block;
-  width: 15px; /* Phóng to tướng lên */
-  height: 15px;
-  background-color: red; /* Nhuộm màu đỏ chót */
+  width: 6px; /* Thu nhỏ lại cho tinh tế */
+  height: 6px;
+  background-color: #888; /* Trả về màu xám */
   border-radius: 50%;
-  margin: 0 5px;
-  /* XÓA HOẶC BÔI ĐEN DÒNG ANIMATION BÊN DƯỚI ĐI */
-  /* animation: bounce 1.4s infinite ease-in-out both; */ 
+  margin: 0 2px;
+  /* BẬT LẠI DÒNG NÀY ĐỂ NÓ NHÚN NHẢY */
+  animation: bounce 1.4s infinite ease-in-out both; 
 }
 
 .typing-indicator span:nth-child(1) { animation-delay: -0.32s; }
