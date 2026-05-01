@@ -52,7 +52,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 },
                 body: JSON.stringify({
                     text: userText,
-                    history: chatHistory
+                    history: messageHistory
                 })
             });
 
