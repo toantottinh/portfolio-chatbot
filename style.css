@@ -197,3 +197,27 @@ ul {
     color: #2c3e50;
     margin-right: auto;
 }
+/* Hiệu ứng AI đang gõ chữ */
+.typing-indicator {
+  display: inline-block;
+  margin-left: 5px;
+}
+
+.typing-indicator span {
+  display: inline-block;
+  width: 15px; /* Phóng to tướng lên */
+  height: 15px;
+  background-color: red; /* Nhuộm màu đỏ chót */
+  border-radius: 50%;
+  margin: 0 5px;
+  /* XÓA HOẶC BÔI ĐEN DÒNG ANIMATION BÊN DƯỚI ĐI */
+  /* animation: bounce 1.4s infinite ease-in-out both; */ 
+}
+
+.typing-indicator span:nth-child(1) { animation-delay: -0.32s; }
+.typing-indicator span:nth-child(2) { animation-delay: -0.16s; }
+
+@keyframes bounce {
+  0%, 80%, 100% { transform: scale(0); }
+  40% { transform: scale(1); }
+}
