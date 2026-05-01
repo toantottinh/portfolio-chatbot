@@ -51,7 +51,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    text: userText 
+                    text: userText,
                     history: chatHistory
                 })
             });
