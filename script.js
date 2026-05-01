@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         const aiMsgElement = document.createElement('div');
         aiMsgElement.classList.add('chat-message', 'ai-message');
-        aiMsgElement.innerHTML = `<strong>AI:</strong> Đang suy nghĩ...`;
+        aiMsgElement.innerHTML = `<strong>AI:</strong> <div class="typing-indicator"><span></span><span></span><span></span></div>`;
         chatHistory.appendChild(aiMsgElement);
         chatHistory.scrollTop = chatHistory.scrollHeight;
 
