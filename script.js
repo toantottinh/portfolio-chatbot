@@ -27,6 +27,21 @@ document.addEventListener('DOMContentLoaded', function () {
         return div.innerHTML;
     }
 
+    // Hàm chuyển đổi Markdown thành HTML để hiển thị code block
+    function formatAIResponse(text) {
+        if (typeof marked !== 'undefined') {
+            return marked.parse(text); // Dịch markdown sang HTML
+        }
+        return escapeHTML(text).replace(/\n/g, '<br>');
+    }
+
+    // Hàm tô màu mã nguồn (Syntax Highlighting) giống VS Code
+    function applySyntaxHighlighting(element) {
+        if (typeof hljs !== 'undefined') {
+            element.querySelectorAll('pre code').forEach((block) => hljs.highlightElement(block));
+        }
+    }
+
     // 1) KIỂM TRA VÀ TẢI LỊCH SỬ TỪ LOCAL STORAGE KHI LOAD TRANG
     let savedHistory = null;
     try {
@@ -47,7 +62,8 @@ document.addEventListener('DOMContentLoaded', function () {
                     msgElement.innerHTML = `<strong>Bạn:</strong> ${escapeHTML(msg.parts[0].text)}`;
                 } else if (msg.role === 'model') {
                     msgElement.classList.add('ai-message');
-                    msgElement.innerHTML = `<strong>AI:</strong> ${escapeHTML(msg.parts[0].text).replace(/\n/g, '<br>')}`;
+                    msgElement.innerHTML = `<strong>AI:</strong> <div class="ai-content">${formatAIResponse(msg.parts[0].text)}</div>`;
+                    applySyntaxHighlighting(msgElement);
                 }
                 chatHistory.appendChild(msgElement);
             });
@@ -152,9 +168,9 @@ document.addEventListener('DOMContentLoaded', function () {
             // 2) Lưu đè mảng mới vào localStorage sau khi AI trả lời
             try { localStorage.setItem('chatHistory', JSON.stringify(messageHistory)); } catch (e) {}
             
-            // Hiển thị câu trả lời lên giao diện, thay thế hiệu ứng "đang gõ..."
-            // Đồng thời dùng escapeHTML và chuyển ký tự xuống dòng (\n) thành thẻ <br> của HTML
-            aiMsgElement.innerHTML = `<strong>AI:</strong> ${escapeHTML(replyText).replace(/\n/g, '<br>')}`;
+            // Hiển thị câu trả lời lên giao diện bằng Markdown thay vì text thường
+            aiMsgElement.innerHTML = `<strong>AI:</strong> <div class="ai-content">${formatAIResponse(replyText)}</div>`;
+            applySyntaxHighlighting(aiMsgElement); // Kích hoạt tô màu code
         } catch (error) {
             console.error('Chi tiết lỗi code:', error);
             aiMsgElement.innerHTML = `<strong>Lỗi:</strong> ${error.message || 'Đã xảy ra lỗi khi gửi tin nhắn.'}`;

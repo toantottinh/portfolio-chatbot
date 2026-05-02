@@ -241,6 +241,32 @@ ul {
   0%, 80%, 100% { transform: scale(0); }
   40% { transform: scale(1); }
 }
+
+/* --- ĐỊNH DẠNG CÚ PHÁP MARKDOWN VÀ MÃ NGUỒN (CODE) CHO AI --- */
+.ai-content {
+    margin-top: 5px;
+}
+
+.ai-content p {
+    margin-bottom: 8px; /* Tách các đoạn văn bản cho dễ đọc */
+}
+
+.ai-content pre {
+    background-color: #282c34; /* Màu nền tối đặc trưng của VS Code */
+    border-radius: 6px;
+    padding: 10px;
+    margin: 10px 0;
+    overflow-x: auto; /* Hiển thị thanh cuộn ngang nếu code quá dài không vừa màn hình */
+}
+
+.ai-content p code {
+    background-color: #d1d8e0; /* Nền xám nhạt cho inline code */
+    color: #c0392b; /* Chữ đỏ làm nổi bật tên biến hoặc hàm nằm giữa câu */
+    padding: 2px 4px;
+    border-radius: 4px;
+    font-family: monospace;
+}
+
 /* Áp dụng cho màn hình có chiều rộng nhỏ hơn 600px */
 @media (max-width: 600px) {
     .chat-container {
