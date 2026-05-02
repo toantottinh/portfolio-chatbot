@@ -8,11 +8,45 @@ document.addEventListener('DOMContentLoaded', function () {
     const chatbotContainer = document.getElementById('chatbot-container');
     const chatInput = document.getElementById('chat-input');
     const sendBtn = document.getElementById('send-btn');
+    const clearBtn = document.getElementById('clear-btn'); // Lấy nút Xóa trò chuyện
     const chatHistory = document.getElementById('chat-history');
 
-    if (!toggleBtn || !chatbotContainer || !chatInput || !sendBtn || !chatHistory) {
+    if (!toggleBtn || !chatbotContainer || !chatInput || !sendBtn || !clearBtn || !chatHistory) {
         console.error('Không tìm thấy một hoặc nhiều phần tử HTML cần thiết cho chatbot.');
         return;
+    }
+
+    // Hàm giúp chống XSS (Cross-Site Scripting). 
+    // Nếu người dùng nhập mã độc (VD: <script>alert(1)</script>), hàm này sẽ biến các dấu <, > thành text bình thường.
+    function escapeHTML(str) {
+        const div = document.createElement('div');
+        div.textContent = str;
+        return div.innerHTML;
+    }
+
+    // 1) KIỂM TRA VÀ TẢI LỊCH SỬ TỪ LOCAL STORAGE KHI LOAD TRANG
+    const savedHistory = localStorage.getItem('chatHistory');
+    if (savedHistory) {
+        try {
+            messageHistory = JSON.parse(savedHistory);
+            chatHistory.innerHTML = ''; // Xóa câu chào mặc định ban đầu để in lại toàn bộ lịch sử
+            messageHistory.forEach(msg => {
+                const msgElement = document.createElement('div');
+                msgElement.classList.add('chat-message');
+                if (msg.role === 'user') {
+                    msgElement.classList.add('user-message');
+                    msgElement.innerHTML = `<strong>Bạn:</strong> ${escapeHTML(msg.parts[0].text)}`;
+                } else if (msg.role === 'model') {
+                    msgElement.classList.add('ai-message');
+                    msgElement.innerHTML = `<strong>AI:</strong> ${escapeHTML(msg.parts[0].text).replace(/\n/g, '<br>')}`;
+                }
+                chatHistory.appendChild(msgElement);
+            });
+            chatHistory.scrollTop = chatHistory.scrollHeight; // Cuộn ngay xuống cuối tin nhắn
+        } catch (error) {
+            console.error('Lỗi khi parse lịch sử chat:', error);
+            messageHistory = [];
+        }
     }
 
     // Lắng nghe sự kiện click vào nút "Hỏi AI về Toàn" để bật/tắt khung chat
@@ -25,14 +59,6 @@ document.addEventListener('DOMContentLoaded', function () {
             toggleBtn.innerText = '💬 Hỏi AI về Toàn';
         }
     });
-
-    // Hàm giúp chống XSS (Cross-Site Scripting). 
-    // Nếu người dùng nhập mã độc (VD: <script>alert(1)</script>), hàm này sẽ biến các dấu <, > thành text bình thường.
-    function escapeHTML(str) {
-        const div = document.createElement('div');
-        div.textContent = str;
-        return div.innerHTML;
-    }
 
     // Hàm xử lý logic chính khi người dùng gửi tin nhắn
     async function sendMessage() {
@@ -68,6 +94,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 role: "user",
                 parts: [{ text: userText }]
             });
+            // 2) Lưu đè mảng mới vào localStorage sau khi User gửi tin nhắn
+            localStorage.setItem('chatHistory', JSON.stringify(messageHistory));
             
             // Gọi API nội bộ của chúng ta (file /api/chat.js)
             const response = await fetch('/api/chat', {
@@ -105,6 +133,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 role: "model",
                 parts: [{ text: replyText }]
             });
+            // 2) Lưu đè mảng mới vào localStorage sau khi AI trả lời
+            localStorage.setItem('chatHistory', JSON.stringify(messageHistory));
             
             // Hiển thị câu trả lời lên giao diện, thay thế hiệu ứng "đang gõ..."
             // Đồng thời dùng escapeHTML và chuyển ký tự xuống dòng (\n) thành thẻ <br> của HTML
@@ -133,5 +163,14 @@ document.addEventListener('DOMContentLoaded', function () {
         if (event.key === 'Enter') {
             sendMessage();
         }
+    });
+
+    // Lắng nghe sự kiện click cho nút Xóa trò chuyện
+    clearBtn.addEventListener('click', function () {
+        localStorage.removeItem('chatHistory'); // 1) Xóa khỏi bộ nhớ cục bộ
+        messageHistory = [];                    // 2) Reset mảng chứa lịch sử
+        
+        // 3) Dọn sạch khung chat HTML và khôi phục câu chào mặc định
+        chatHistory.innerHTML = '<p><strong>AI:</strong> Chào bạn, tôi có thể cung cấp thêm thông tin gì về định hướng Backend và các kỹ năng của Toàn?</p>';
     });
 });
