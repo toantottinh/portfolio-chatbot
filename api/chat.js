@@ -1,3 +1,6 @@
+// Import thư viện Supabase (bạn nhớ chạy lệnh: npm install @supabase/supabase-js)
+const { createClient } = require('@supabase/supabase-js');
+
 // Đây là hàm xử lý chính của Backend (Serverless)
 module.exports = async function handler(req, res) {
     // 1. Chỉ chấp nhận các yêu cầu (request) dạng POST từ Frontend gửi lên
@@ -8,10 +11,12 @@ module.exports = async function handler(req, res) {
     // 2. Lấy câu hỏi do Frontend gửi lên (nằm trong body của request)
     const { text: userText, history } = req.body;
 
-    // 3. LẤY API KEY BÍ MẬT
+    // 3. LẤY API KEY VÀ CẤU HÌNH SUPABASE TỪ ENVIRONMENT VARIABLES
     // process.env là nơi an toàn chứa các biến môi trường. 
     // Hacker không thể F12 để xem được biến này!
     const API_KEY = process.env.GEMINI_API_KEY;
+    const SUPABASE_URL = process.env.SUPABASE_URL;
+    const SUPABASE_KEY = process.env.SUPABASE_KEY;
 
     if (!API_KEY) {
         return res.status(500).json({ error: 'Báo động: Chưa cấu hình API Key trên Server!' });
@@ -51,7 +56,25 @@ module.exports = async function handler(req, res) {
         // Bóc tách lấy câu trả lời
         const aiReply = data.candidates[0].content.parts[0].text;
 
-        // 6. Trả câu trả lời (dạng JSON) về lại cho Frontend
+        // 6. Khởi tạo Supabase và lưu vào cơ sở dữ liệu
+        if (SUPABASE_URL && SUPABASE_KEY) {
+            try {
+                const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+                const { error: dbError } = await supabase
+                    .from('messages')
+                    .insert([
+                        { user_message: userText, ai_message: aiReply }
+                    ]);
+                
+                if (dbError) {
+                    console.error("Lỗi thao tác với Database Supabase:", dbError);
+                }
+            } catch (dbException) {
+                console.error("Lỗi khi kết nối tới Supabase:", dbException);
+            }
+        }
+
+        // 7. Trả câu trả lời (dạng JSON) về lại cho Frontend
         return res.status(200).json({ reply: aiReply });
 
     } catch (error) {
