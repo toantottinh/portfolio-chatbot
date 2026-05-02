@@ -129,11 +129,26 @@ ul {
 }
 
 #chatbot-container h3 {
+    display: flex; /* Dàn đều nội dung tiêu đề và nút xóa */
+    justify-content: space-between;
+    align-items: center;
     background-color: #3498db; /* Tiêu đề màu xanh dương */
     color: white;
     padding: 12px;
     font-size: 16px;
-    text-align: center;
+}
+
+/* Nút xóa lịch sử (Thùng rác) trên Header Chatbot */
+#clear-btn {
+    background: none;
+    border: none;
+    font-size: 18px;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+#clear-btn:hover {
+    transform: scale(1.2); /* Phóng to nhẹ khi di chuột vào */
 }
 
 #chat-history {

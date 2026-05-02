@@ -20,6 +20,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // Hàm giúp chống XSS (Cross-Site Scripting). 
     // Nếu người dùng nhập mã độc (VD: <script>alert(1)</script>), hàm này sẽ biến các dấu <, > thành text bình thường.
     function escapeHTML(str) {
+        if (!str) return ''; // Ngăn lỗi nếu biến str bị rỗng hoặc undefined
         const div = document.createElement('div');
         div.textContent = str;
         return div.innerHTML;
@@ -128,8 +129,15 @@ document.addEventListener('DOMContentLoaded', function () {
 
             // Kiểm tra xem server có trả về lỗi không (HTTP status khác 2xx)
             if (!response.ok) {
-                const message = data?.error || data?.message || response.statusText || 'Lỗi Server nội bộ';
-                throw new Error(message);
+                let errorMsg = 'Lỗi Server nội bộ';
+                if (data && data.error) {
+                    errorMsg = typeof data.error === 'string' ? data.error : (data.error.message || JSON.stringify(data.error));
+                } else if (data && data.message) {
+                    errorMsg = data.message;
+                } else {
+                    errorMsg = response.statusText;
+                }
+                throw new Error(errorMsg);
             }
 
             // Lấy câu trả lời thành công từ server
