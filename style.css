@@ -138,8 +138,13 @@ ul {
     font-size: 16px;
 }
 
-/* Nút xóa lịch sử (Thùng rác) trên Header Chatbot */
-#clear-btn {
+.chat-header-actions {
+    display: flex;
+    gap: 10px; /* Tạo khoảng cách giữa nút Tải xuống và nút Xóa */
+}
+
+/* Nút công cụ trên Header Chatbot */
+#clear-btn, #export-btn {
     background: none;
     border: none;
     font-size: 18px;
@@ -147,7 +152,7 @@ ul {
     transition: transform 0.2s;
 }
 
-#clear-btn:hover {
+#clear-btn:hover, #export-btn:hover {
     transform: scale(1.2); /* Phóng to nhẹ khi di chuột vào */
 }
 

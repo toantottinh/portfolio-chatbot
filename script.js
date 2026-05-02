@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const chatInput = document.getElementById('chat-input');
     const sendBtn = document.getElementById('send-btn');
     const clearBtn = document.getElementById('clear-btn'); // Lấy nút Xóa trò chuyện
+    const exportBtn = document.getElementById('export-btn'); // Lấy nút Xuất lịch sử
     const chatHistory = document.getElementById('chat-history');
 
     // Bỏ clearBtn ra khỏi điều kiện bắt buộc để tránh sập code nếu bạn lỡ quên chưa save file HTML
@@ -189,6 +190,30 @@ document.addEventListener('DOMContentLoaded', function () {
             
             // 3) Xóa toàn bộ nội dung trong khung chat HTML theo yêu cầu
             chatHistory.innerHTML = '';
+        });
+    }
+
+    // Lắng nghe sự kiện click cho nút Xuất lịch sử
+    if (exportBtn) {
+        exportBtn.addEventListener('click', function () {
+            const savedHistory = localStorage.getItem('chatHistory');
+            if (!savedHistory) {
+                alert('Chưa có dữ liệu trò chuyện để tải xuống!');
+                return;
+            }
+
+            // 1) Tạo Blob định dạng JSON từ dữ liệu localStorage
+            const blob = new Blob([savedHistory], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+
+            // 2) Tạo thẻ <a> ẩn để giả lập hành vi tải file
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'LichSuChat_Toan.json';
+            document.body.appendChild(a); // Gắn thẻ <a> vào HTML
+            a.click(); // Giả lập thao tác click để tải xuống
+            document.body.removeChild(a); // Xóa thẻ <a> đi cho sạch
+            URL.revokeObjectURL(url); // Giải phóng bộ nhớ
         });
     }
 });
