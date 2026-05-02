@@ -39,7 +39,13 @@ module.exports = async function handler(req, res) {
         const data = await response.json();
 
         if (!response.ok) {
-            throw new Error(data.error.message || "Lỗi kết nối từ Google");
+            // Kiểm tra nếu là lỗi 429 (Too Many Requests) hoặc lỗi liên quan đến Quota
+            if (response.status === 429 || (data.error && data.error.message.includes("quota"))) {
+                throw new Error("AI đang nhận quá nhiều tin nhắn (Vượt giới hạn miễn phí). Toàn đợi khoảng 30 giây rồi gửi lại nha!");
+            }
+            
+            // Bắt các lỗi khác
+            throw new Error(data.error?.message || "Lỗi kết nối từ Google");
         }
 
         // Bóc tách lấy câu trả lời
@@ -50,6 +56,7 @@ module.exports = async function handler(req, res) {
 
     } catch (error) {
         console.error("Lỗi Server:", error);
-        return res.status(500).json({ error: 'Máy chủ AI đang bận, vui lòng thử lại sau.' });
+        // Trả về đúng message lỗi đã catch ở trên để Frontend hiển thị cho người dùng
+        return res.status(500).json({ error: error.message || 'Máy chủ AI đang bận, vui lòng thử lại sau.' });
     }
 }
