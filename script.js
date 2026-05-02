@@ -39,6 +39,16 @@ document.addEventListener('DOMContentLoaded', function () {
         aiMsgElement.innerHTML = `<strong>AI:</strong> <div class="typing-indicator"><span></span><span></span><span></span></div>`;
         chatHistory.appendChild(aiMsgElement);
         chatHistory.scrollTop = chatHistory.scrollHeight;
+        // Tìm ô nhập liệu
+        const userInput = document.getElementById('user-input'); 
+
+        userInput.addEventListener('keydown', (event) => {
+         // Kiểm tra nếu phím nhấn là Enter và không nhấn kèm phím Shift
+        if (event.key === 'Enter' && !event.shiftKey) {
+            event.preventDefault(); // Ngăn việc xuống dòng trong ô input
+            document.getElementById('send-btn').click(); // Kích hoạt sự kiện click nút Gửi
+        }
+    });
 
         try {
             messageHistory.push({
@@ -54,7 +64,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     text: userText,
                     history: messageHistory
                 })
-            });
+            }); 
 
             const text = await response.text();     
             let data = {};
@@ -90,5 +100,7 @@ document.addEventListener('DOMContentLoaded', function () {
         if (event.key === 'Enter') {
             sendMessage();
         }
+        const chatHistory = document.getElementById('chat-history');
+        chatHistory.scrollTop = chatHistory.scrollHeight;
     });
-}); 
+});

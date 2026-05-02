@@ -221,3 +221,16 @@ ul {
   0%, 80%, 100% { transform: scale(0); }
   40% { transform: scale(1); }
 }
+/* Áp dụng cho màn hình có chiều rộng nhỏ hơn 600px */
+@media (max-width: 600px) {
+    .chat-container {
+        width: 95%; /* Mở rộng khung chat gần hết màn hình */
+        height: 80vh; /* Tăng chiều cao để dễ nhìn */
+        bottom: 10px;
+        right: 10px;
+    }
+
+    input[type="text"] {
+        font-size: 16px; /* Tránh việc iOS tự động zoom khi nhấn vào ô nhập liệu */
+    }
+}
