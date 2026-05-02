@@ -11,7 +11,8 @@ document.addEventListener('DOMContentLoaded', function () {
     const clearBtn = document.getElementById('clear-btn'); // Lấy nút Xóa trò chuyện
     const chatHistory = document.getElementById('chat-history');
 
-    if (!toggleBtn || !chatbotContainer || !chatInput || !sendBtn || !clearBtn || !chatHistory) {
+    // Bỏ clearBtn ra khỏi điều kiện bắt buộc để tránh sập code nếu bạn lỡ quên chưa save file HTML
+    if (!toggleBtn || !chatbotContainer || !chatInput || !sendBtn || !chatHistory) {
         console.error('Không tìm thấy một hoặc nhiều phần tử HTML cần thiết cho chatbot.');
         return;
     }
@@ -25,7 +26,13 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // 1) KIỂM TRA VÀ TẢI LỊCH SỬ TỪ LOCAL STORAGE KHI LOAD TRANG
-    const savedHistory = localStorage.getItem('chatHistory');
+    let savedHistory = null;
+    try {
+        savedHistory = localStorage.getItem('chatHistory');
+    } catch (e) {
+        console.warn('Cảnh báo: Trình duyệt chặn localStorage, bỏ qua tính năng lưu lịch sử.');
+    }
+
     if (savedHistory) {
         try {
             messageHistory = JSON.parse(savedHistory);
@@ -94,8 +101,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 role: "user",
                 parts: [{ text: userText }]
             });
-            // 2) Lưu đè mảng mới vào localStorage sau khi User gửi tin nhắn
-            localStorage.setItem('chatHistory', JSON.stringify(messageHistory));
+            // 2) Lưu đè mảng mới vào localStorage sau khi User gửi tin nhắn (bọc try-catch chống lỗi)
+            try { localStorage.setItem('chatHistory', JSON.stringify(messageHistory)); } catch (e) {}
             
             // Gọi API nội bộ của chúng ta (file /api/chat.js)
             const response = await fetch('/api/chat', {
@@ -134,7 +141,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 parts: [{ text: replyText }]
             });
             // 2) Lưu đè mảng mới vào localStorage sau khi AI trả lời
-            localStorage.setItem('chatHistory', JSON.stringify(messageHistory));
+            try { localStorage.setItem('chatHistory', JSON.stringify(messageHistory)); } catch (e) {}
             
             // Hiển thị câu trả lời lên giao diện, thay thế hiệu ứng "đang gõ..."
             // Đồng thời dùng escapeHTML và chuyển ký tự xuống dòng (\n) thành thẻ <br> của HTML
@@ -166,11 +173,14 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     // Lắng nghe sự kiện click cho nút Xóa trò chuyện
-    clearBtn.addEventListener('click', function () {
-        localStorage.removeItem('chatHistory'); // 1) Xóa khỏi bộ nhớ cục bộ
-        messageHistory = [];                    // 2) Reset mảng chứa lịch sử
-        
-        // 3) Dọn sạch khung chat HTML và khôi phục câu chào mặc định
-        chatHistory.innerHTML = '<p><strong>AI:</strong> Chào bạn, tôi có thể cung cấp thêm thông tin gì về định hướng Backend và các kỹ năng của Toàn?</p>';
-    });
+    // Kiểm tra nếu nút này thực sự tồn tại trong HTML thì mới gắn sự kiện
+    if (clearBtn) {
+        clearBtn.addEventListener('click', function () {
+            try { localStorage.removeItem('chatHistory'); } catch (e) {} // 1) Xóa khỏi bộ nhớ
+            messageHistory = [];                    // 2) Reset mảng
+            
+            // 3) Khôi phục HTML
+            chatHistory.innerHTML = '<p><strong>AI:</strong> Chào bạn, tôi có thể cung cấp thêm thông tin gì về định hướng Backend và các kỹ năng của Toàn?</p>';
+        });
+    }
 });
