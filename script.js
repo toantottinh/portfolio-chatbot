@@ -187,8 +187,8 @@ document.addEventListener('DOMContentLoaded', function () {
             try { localStorage.removeItem('chatHistory'); } catch (e) {} // 1) Xóa khỏi bộ nhớ
             messageHistory = [];                    // 2) Reset mảng
             
-            // 3) Khôi phục HTML
-            chatHistory.innerHTML = '<p><strong>AI:</strong> Chào bạn, tôi có thể cung cấp thêm thông tin gì về định hướng Backend và các kỹ năng của Toàn?</p>';
+            // 3) Xóa toàn bộ nội dung trong khung chat HTML theo yêu cầu
+            chatHistory.innerHTML = '';
         });
     }
 });
