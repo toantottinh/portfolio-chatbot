@@ -49,6 +49,17 @@ document.addEventListener('DOMContentLoaded', function () {
             document.getElementById('send-btn').click(); // Kích hoạt sự kiện click nút Gửi
         }
     });
+    // Tìm ô nhập liệu
+        const userInput = document.getElementById('user-input'); 
+
+    // ĐẶT CÁI NÀY Ở NGOÀI CÙNG, KHÔNG NẰM TRONG HÀM NÀO CẢ
+    const userInput = document.getElementById('user-input');
+    userInput.addEventListener('keydown', (event) => {
+    if (event.key === 'Enter' && !event.shiftKey) {
+        event.preventDefault();
+        document.getElementById('send-btn').click(); 
+        }
+    });
 
         try {
             messageHistory.push({
@@ -101,6 +112,6 @@ document.addEventListener('DOMContentLoaded', function () {
             sendMessage();
         }
         const chatHistory = document.getElementById('chat-history');
-        chatHistory.scrollTop = chatHistory.scrollHeight;
+    chatHistory.scrollTop = chatHistory.scrollHeight;
     });
 });
